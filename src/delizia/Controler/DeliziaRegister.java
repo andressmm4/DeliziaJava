@@ -36,17 +36,18 @@ public class DeliziaRegister {
     }
 
     //Action save register in database
-    public static void save() {
+    public static void saveReservation() {
         Connection con = null;
         try {
             con = ConnectDB.connect();
-            ps = con.prepareStatement("INSERT INTO reservaciones (fecha, hora, tipo_evento, nit, nombre, no_personas, no_mesa, consumo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            ps = con.prepareStatement("INSERT INTO reservations(name, num_person, consumo_asigned, table_asigned) VALUES (?, ?, ?, ?)");
+            ps.setString(5, ViewDeliziaReservation.inputName.getText());
+            ps.setInt(6, Integer.parseInt(ViewDeliziaReservation.inputNumPersons.getText()));
+            ps.setInt(4, Integer.parseInt(ViewDeliziaReservation.inputNit.getText()));
             ps.setDate(1, Date.valueOf(ViewDeliziaReservation.inputDate.getText()));
             ps.setString(2, ViewDeliziaReservation.inputHours.getSelectedItem().toString());
             ps.setString(3, ViewDeliziaReservation.inputEvent.getText());
-            ps.setInt(4, Integer.parseInt(ViewDeliziaReservation.inputNit.getText()));
-            ps.setString(5, ViewDeliziaReservation.inputName.getText());
-            ps.setInt(6, Integer.parseInt(ViewDeliziaReservation.inputNumPersons.getText()));
+            
             ps.setInt(7, Integer.parseInt(ViewDeliziaReservation.inputNumTable.getValue().toString()));
             ps.setInt(8, ViewDeliziaReservation.consumo);
 
@@ -135,7 +136,7 @@ public class DeliziaRegister {
             sqlSelect = "SELECT consumo FROM reservaciones";
             ps = miConeccion.prepareStatement(sqlSelect);
             String sqlUpdate;
-            sqlUpdate = "update reservaciones SET  consumo=? where no_mesa LIKE '%" + numTable + "%'";
+            sqlUpdate = "UPDATE reservaciones SET  consumo=? where no_mesa LIKE '%" + numTable + "%'";
             ps = miConeccion.prepareStatement(sqlUpdate);
             int respuesta = ps.executeUpdate();
 

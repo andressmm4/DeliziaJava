@@ -10,7 +10,7 @@ public class ConnectDB {
     public static Connection connect() {
         Connection con = null;
         try {
-            con =(Connection) DriverManager.getConnection("jdbc:mysql://localhost/restaurant", "root", "");
+            con =(Connection) DriverManager.getConnection("jdbc:mysql://localhost/delizia", "root", "");
             //JOptionPane.showMessageDialog(null, "Conexion exitosa");
             System.out.println("Successful Connection");
         } catch (SQLException e) {
