@@ -26,7 +26,6 @@ public class DeliziaRegister {
 
     //Action Clear input of the form
     public static void clear() {
-        ViewDeliziaReservation.inputDate.setText(null);
         ViewDeliziaReservation.inputHours.setSelectedIndex(0);
         ViewDeliziaReservation.inputEvent.setText(null);
         ViewDeliziaReservation.inputNit.setText(null);
@@ -44,7 +43,6 @@ public class DeliziaRegister {
             ps.setString(5, ViewDeliziaReservation.inputName.getText());
             ps.setInt(6, Integer.parseInt(ViewDeliziaReservation.inputNumPersons.getText()));
             ps.setInt(4, Integer.parseInt(ViewDeliziaReservation.inputNit.getText()));
-            ps.setDate(1, Date.valueOf(ViewDeliziaReservation.inputDate.getText()));
             ps.setString(2, ViewDeliziaReservation.inputHours.getSelectedItem().toString());
             ps.setString(3, ViewDeliziaReservation.inputEvent.getText());
             
@@ -73,23 +71,20 @@ public class DeliziaRegister {
 
     public static void table(Date filter_date, String filter_name) {
         try {
-            String[] titulos = {"FECHA", "HORA", "EVENTO", "NIT", "NOMBRE", "PERSONAS", "MESA", "CONSUMO"};
-            String[] registros = new String[8];
+            String[] titulos = {"ID", "NOMBRE", "N.PERSONAS", "MESA", "CONSUMO"};
+            String[] registros = new String[5];
             mimodel = new DefaultTableModel(null, titulos);
             Connection miConeccion = ConnectDB.connect();
             String sql;
-            sql = "SELECT * FROM reservaciones WHERE (fecha = '" + filter_date + "') AND (nombre LIKE '%" + filter_name + "%') ORDER BY hora ASC";
+            sql = "SELECT reservations.id_rev, reservations.name, reservations.num_person, reservations.table_asigned, consumo.total_cost FROM reservations, consumo WHERE (reservations.id_rev = consumo.id_cons) AND (reservations.name LIKE '%" + filter_name + "%')";
             PreparedStatement miStatement = miConeccion.prepareStatement(sql);
             ResultSet miResultset = miStatement.executeQuery(sql);
             while (miResultset.next()) {
-                registros[0] = miResultset.getString("fecha");
-                registros[1] = miResultset.getString("hora");
-                registros[2] = miResultset.getString("tipo_evento");
-                registros[3] = miResultset.getString("nit");
-                registros[4] = miResultset.getString("nombre");
-                registros[5] = miResultset.getString("no_personas");
-                registros[6] = miResultset.getString("no_mesa");
-                registros[7] = miResultset.getString("consumo");
+                registros[0] = miResultset.getString("id_rev");
+                registros[1] = miResultset.getString("name");
+                registros[2] = miResultset.getString("num_person");
+                registros[3] = miResultset.getString("table_asigned");
+                registros[4] = miResultset.getString("total_cost");
                 mimodel.addRow(registros);
             }
             ViewDeliziaPanel.table_view_register.setModel(mimodel);
