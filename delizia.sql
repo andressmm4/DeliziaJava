@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-11-2018 a las 18:55:23
+-- Tiempo de generación: 15-11-2018 a las 23:14:05
 -- Versión del servidor: 10.1.34-MariaDB
 -- Versión de PHP: 7.2.7
 
@@ -17,7 +17,9 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
-CREATE DATABASE `delizia`;
+
+--
+-- Base de datos: `delizia`
 --
 
 -- --------------------------------------------------------
@@ -28,7 +30,7 @@ CREATE DATABASE `delizia`;
 
 CREATE TABLE `consumo` (
   `id_cons` int(11) NOT NULL,
-  `descript` int(11) NOT NULL,
+  `descript` varchar(500) COLLATE latin1_spanish_ci NOT NULL,
   `total_cost` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
@@ -37,11 +39,16 @@ CREATE TABLE `consumo` (
 --
 
 INSERT INTO `consumo` (`id_cons`, `descript`, `total_cost`) VALUES
-(1, 1256, 500),
-(2, 1256, 1000),
-(3, 1256, 700),
-(4, 1586, 200),
-(5, 1256, 1000);
+(1, '0', 500),
+(2, '0', 1000),
+(3, '0', 700),
+(4, '0', 200),
+(5, '0', 1000),
+(6, '0', 0),
+(7, '0', 0),
+(8, '0', 0),
+(9, '0', 0),
+(10, '0', 0);
 
 -- --------------------------------------------------------
 
@@ -73,22 +80,28 @@ INSERT INTO `menu` (`id_eat`, `name`, `description`, `cost`, `category`) VALUES
 
 CREATE TABLE `reservations` (
   `id_rev` int(100) NOT NULL,
+  `date` date NOT NULL,
   `name` varchar(100) COLLATE latin1_spanish_ci DEFAULT NULL,
   `num_person` int(2) DEFAULT NULL,
-  `consumo_asing` int(100) DEFAULT NULL,
-  `table_asing` int(11) NOT NULL
+  `consumo_asigned` int(100) DEFAULT NULL,
+  `table_asigned` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `reservations`
 --
 
-INSERT INTO `reservations` (`id_rev`, `name`, `num_person`, `consumo_asing`, `table_asing`) VALUES
-(1, 'Diego', 4, 1, 5),
-(2, 'Andres', 2, 2, 1),
-(3, 'Andres', 4, 3, 9),
-(4, 'Juan', 4, 4, 20),
-(5, 'Pedro', 6, 5, 18);
+INSERT INTO `reservations` (`id_rev`, `date`, `name`, `num_person`, `consumo_asigned`, `table_asigned`) VALUES
+(1, '2018-11-14', 'Diego', 4, 1, 5),
+(2, '2018-11-14', 'Andres', 2, 2, 1),
+(3, '2018-11-14', 'Andres', 4, 3, 9),
+(4, '2018-11-14', 'Juan', 4, 4, 20),
+(5, '2018-11-14', 'Pedro', 6, 5, 18),
+(6, '2018-11-14', 'Juan Pablo Segundo', 6, 6, 17),
+(7, '2018-11-14', 'Juan Domingez', 5, 7, 12),
+(8, '2018-11-14', 'Michael Jackson', 1, 8, 3),
+(9, '2018-11-15', 'Sebastian Diaz', 6, 9, 10),
+(10, '2018-11-15', 'Juan Barrrios', 1, 10, 2);
 
 -- --------------------------------------------------------
 
@@ -107,8 +120,8 @@ CREATE TABLE `tables` (
 --
 
 INSERT INTO `tables` (`id_table`, `capacity`, `available`) VALUES
-(1, 2, '0'),
-(2, 2, '0'),
+(1, 2, '1'),
+(2, 2, '1'),
 (3, 2, '0'),
 (4, 2, '0'),
 (5, 2, '0'),
@@ -116,7 +129,7 @@ INSERT INTO `tables` (`id_table`, `capacity`, `available`) VALUES
 (7, 4, '0'),
 (8, 4, '0'),
 (9, 4, '0'),
-(10, 4, '0'),
+(10, 4, '1'),
 (11, 6, '0'),
 (12, 6, '0'),
 (13, 6, '0'),
@@ -149,8 +162,8 @@ ALTER TABLE `menu`
 --
 ALTER TABLE `reservations`
   ADD PRIMARY KEY (`id_rev`),
-  ADD KEY `consumo_asing` (`consumo_asing`,`table_asing`),
-  ADD KEY `asignarMesa` (`table_asing`);
+  ADD KEY `consumo_asing` (`consumo_asigned`,`table_asigned`),
+  ADD KEY `asignarMesa` (`table_asigned`);
 
 --
 -- Indices de la tabla `tables`
@@ -172,7 +185,7 @@ ALTER TABLE `menu`
 -- AUTO_INCREMENT de la tabla `reservations`
 --
 ALTER TABLE `reservations`
-  MODIFY `id_rev` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_rev` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Restricciones para tablas volcadas
@@ -188,7 +201,7 @@ ALTER TABLE `consumo`
 -- Filtros para la tabla `reservations`
 --
 ALTER TABLE `reservations`
-  ADD CONSTRAINT `asignarMesa` FOREIGN KEY (`table_asing`) REFERENCES `tables` (`id_table`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `asignarMesa` FOREIGN KEY (`table_asigned`) REFERENCES `tables` (`id_table`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

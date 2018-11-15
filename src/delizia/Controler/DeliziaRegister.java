@@ -81,7 +81,7 @@ public class DeliziaRegister {
             ps.setInt(3, Integer.parseInt(ViewDeliziaReservation.inputNumPersons.getText()));
             ps.setInt(4, count);
             ps.setString(5, ViewDeliziaReservation.inputTable.getText());
-
+            int tableAsigned = Integer.parseInt(ViewDeliziaReservation.inputTable.getText()); 
             int res = ps.executeUpdate();
             if (res > 0) {
                 System.out.println("Datos de tb-reservations Guardados");
@@ -99,19 +99,26 @@ public class DeliziaRegister {
                         
                         // para actualizar el estado de la mesa
                         try {
+                            con = ConnectDB.connect();
+                            ps = con.prepareStatement("UPDATE tables SET available = '1' WHERE tables.id_table = '" + tableAsigned + "'");
                             
+                            res = ps.executeUpdate();
+                            
+                            if (res > 0) {
+                                System.out.println("Mesa modificada");
+                            } else {
+                                System.out.println("Fallo en la modificacion de la mesa");
+                            }
                         } catch (Exception e) {
+                            System.out.println(e);
                         }
                         JOptionPane.showMessageDialog(null, "Reservación Realizada");
                         clear();
                         
-                        
-
                         table(filter_date, "");
                     } else {
                         System.out.println("Datos de tb-consumo No Guardados");
                         JOptionPane.showMessageDialog(null, "Erro al Reservación Realizada");
-                        clear();
                     }
                     con.close();
                 } catch (Exception e) {
@@ -182,14 +189,15 @@ public class DeliziaRegister {
     }
     
     public static void updateConsumo(int numTable) {
+        Connection con = null;
         try {
-            Connection miConeccion = ConnectDB.connect();
+            con = ConnectDB.connect();
             String sqlSelect;
             sqlSelect = "SELECT consumo FROM reservaciones";
-            ps = miConeccion.prepareStatement(sqlSelect);
+            ps = con.prepareStatement(sqlSelect);
             String sqlUpdate;
             sqlUpdate = "UPDATE reservaciones SET  consumo=? where no_mesa LIKE '%" + numTable + "%'";
-            ps = miConeccion.prepareStatement(sqlUpdate);
+            ps = con.prepareStatement(sqlUpdate);
             int respuesta = ps.executeUpdate();
 
             int firstConsumo = Integer.parseInt(rs.getString("consumo"));
@@ -216,7 +224,7 @@ public class DeliziaRegister {
                 ViewDeliziaConsumo.backgroundLabel_Succes.setVisible(false);
             }
 
-            miConeccion.close();
+            con.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
