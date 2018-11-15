@@ -16,6 +16,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 public class DeliziaRegister {
+    
+    //Variables
+    public static int countRegister;
 
     //For Query in the actions of the database
     public static ResultSet rs;
@@ -23,45 +26,99 @@ public class DeliziaRegister {
 
     //For the table
     public static DefaultTableModel mimodel;
+    
+    //For Date
+    java.util.Date date = new java.util.Date();
+    DateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd");
+    Date filter_date = Date.valueOf(dateFormat.format(date));
 
     //Action Clear input of the form
     public static void clear() {
-        ViewDeliziaReservation.inputHours.setSelectedIndex(0);
-        ViewDeliziaReservation.inputEvent.setText(null);
-        ViewDeliziaReservation.inputNit.setText(null);
+        ViewDeliziaReservation.inputTable.setText(null);
         ViewDeliziaReservation.inputName.setText(null);
         ViewDeliziaReservation.inputNumPersons.setText(null);
-        ViewDeliziaReservation.inputNumTable.setValue(1);
+    }
+    
+    //Contamos las reservaciones que estan registradas
+    public static void countRegisterMetod(){
+        Connection con = null;
+        
+        try {
+            con = ConnectDB.connect();
+            String sql = "";
+            sql = "SELECT count(*) as total FROM reservations";
+            
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                int result = Integer.parseInt(rs.getString("total"));
+                countRegister = result + 1;
+            } 
+            con.close();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     //Action save register in database
-    public static void saveReservation() {
+    public static void saveReservation(int count) {
+        
+        //For Date
+        java.util.Date date = new java.util.Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd");
+        Date filter_date = Date.valueOf(dateFormat.format(date));
+        
+        //Variable of Connection
         Connection con = null;
+        
         try {
             con = ConnectDB.connect();
-            ps = con.prepareStatement("INSERT INTO reservations(name, num_person, consumo_asigned, table_asigned) VALUES (?, ?, ?, ?)");
-            ps.setString(5, ViewDeliziaReservation.inputName.getText());
-            ps.setInt(6, Integer.parseInt(ViewDeliziaReservation.inputNumPersons.getText()));
-            ps.setInt(4, Integer.parseInt(ViewDeliziaReservation.inputNit.getText()));
-            ps.setString(2, ViewDeliziaReservation.inputHours.getSelectedItem().toString());
-            ps.setString(3, ViewDeliziaReservation.inputEvent.getText());
-            
-            ps.setInt(7, Integer.parseInt(ViewDeliziaReservation.inputNumTable.getValue().toString()));
-            ps.setInt(8, ViewDeliziaReservation.consumo);
+            ps = con.prepareStatement("INSERT INTO reservations(date, name, num_person, consumo_asigned, table_asigned) VALUES (?, ?, ?, ? ,?)");
+            ps.setDate(1, filter_date);
+            ps.setString(2, ViewDeliziaReservation.inputName.getText());
+            ps.setInt(3, Integer.parseInt(ViewDeliziaReservation.inputNumPersons.getText()));
+            ps.setInt(4, count);
+            ps.setString(5, ViewDeliziaReservation.inputTable.getText());
 
             int res = ps.executeUpdate();
             if (res > 0) {
-                JOptionPane.showMessageDialog(null, "Reservación Realizada");
-                clear();
+                System.out.println("Datos de tb-reservations Guardados");
 
-                //For Date
-                java.util.Date date = new java.util.Date();
-                DateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd");
-                Date filter_date = Date.valueOf(dateFormat.format(date));
-                table(filter_date, "");
+                try {
+                    con = ConnectDB.connect();
+                    ps = con.prepareStatement("INSERT INTO consumo (id_cons, descript, total_cost) VALUES (?, ?, ?)");
+                    ps.setInt(1, count);
+                    ps.setString(2, "0");
+                    ps.setInt(3, 0);
+
+                    res = ps.executeUpdate();
+                    if (res > 0) {
+                        System.out.println("Datos de tb-consumo Guardados");
+                        
+                        // para actualizar el estado de la mesa
+                        try {
+                            
+                        } catch (Exception e) {
+                        }
+                        JOptionPane.showMessageDialog(null, "Reservación Realizada");
+                        clear();
+                        
+                        
+
+                        table(filter_date, "");
+                    } else {
+                        System.out.println("Datos de tb-consumo No Guardados");
+                        JOptionPane.showMessageDialog(null, "Erro al Reservación Realizada");
+                        clear();
+                    }
+                    con.close();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
             } else {
-                JOptionPane.showMessageDialog(null, "Erro al Reservación Realizada");
-                clear();
+                System.out.println("Datos de tb-reservations No Guardados"); 
             }
             con.close();
         } catch (Exception e) {
