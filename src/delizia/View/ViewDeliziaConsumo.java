@@ -14,7 +14,7 @@ public class ViewDeliziaConsumo extends javax.swing.JFrame {
     public static int numTable;
     public static int selectTable;
     public static String name;
-
+    
     //For Date
     java.util.Date date = new java.util.Date();
     DateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd");
@@ -32,7 +32,7 @@ public class ViewDeliziaConsumo extends javax.swing.JFrame {
         backgroundLabel_Danger.setVisible(false);
         
     }
-    public static void addItems(){
+    public static void addItems(){ 
         listTablesAvailable.removeAllItems();
         ArrayList<String> listTables = new ArrayList<String>();
         listTables = DeliziaControler.llenarComboTables();
