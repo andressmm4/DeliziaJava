@@ -31,15 +31,15 @@ public class ViewDeliziaConsumo extends javax.swing.JFrame {
         backgroundLabel_Succes.setVisible(false);
         backgroundLabel_Danger.setVisible(false);
         
+    }
+    public static void addItems(){
         listTablesAvailable.removeAllItems();
         ArrayList<String> listTables = new ArrayList<String>();
         listTables = DeliziaControler.llenarComboTables();
         for (int i = 0; i < listTables.size(); i++) {
             listTablesAvailable.addItem(listTables.get(i));
         }
-        
     }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

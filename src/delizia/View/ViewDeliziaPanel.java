@@ -321,6 +321,8 @@ public class ViewDeliziaPanel extends javax.swing.JFrame {
 
     private void btn_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addActionPerformed
         consumoWindow.setVisible(true);
+        DeliziaControler.llenarComboTables();
+        consumoWindow.addItems();
     }//GEN-LAST:event_btn_addActionPerformed
 
     private void btn_procesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_procesActionPerformed
