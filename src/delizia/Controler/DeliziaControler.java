@@ -16,7 +16,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public class DeliziaRegister {
+public class DeliziaControler {
     
     //Variables
     public static int countRegister;

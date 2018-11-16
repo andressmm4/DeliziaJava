@@ -1,6 +1,6 @@
 package delizia.View;
 
-import delizia.Controler.DeliziaRegister;
+import delizia.Controler.DeliziaControler;
 import java.awt.Color;
 import java.awt.Dimension;
 
@@ -132,9 +132,9 @@ public class ViewDeliziaReservation extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_newRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_newRegisterActionPerformed
-        DeliziaRegister.countRegisterMetod();
-        count = DeliziaRegister.countRegister;
-        DeliziaRegister.saveReservation(count);
+        DeliziaControler.countRegisterMetod();
+        count = DeliziaControler.countRegister;
+        DeliziaControler.saveReservation(count);
     }//GEN-LAST:event_btn_newRegisterActionPerformed
 
     public static void main(String args[]) {

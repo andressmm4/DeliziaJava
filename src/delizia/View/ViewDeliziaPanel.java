@@ -1,6 +1,6 @@
 package delizia.View;
 
-import delizia.Controler.DeliziaRegister;
+import delizia.Controler.DeliziaControler;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.sql.Date;
@@ -25,7 +25,7 @@ public class ViewDeliziaPanel extends javax.swing.JFrame {
         this.getContentPane().setBackground(new Color(52, 58, 64));
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setMinimumSize(new Dimension(1920, 1080));
-        DeliziaRegister.table(filter_date, "");
+        DeliziaControler.table(filter_date, "");
     }
 
     @SuppressWarnings("unchecked")
@@ -328,7 +328,7 @@ public class ViewDeliziaPanel extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_procesActionPerformed
 
     private void input_filterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_input_filterActionPerformed
-        DeliziaRegister.table(filter_date, input_filter.getText());
+        DeliziaControler.table(filter_date, input_filter.getText());
     }//GEN-LAST:event_input_filterActionPerformed
 
     public static void main(String args[]) {

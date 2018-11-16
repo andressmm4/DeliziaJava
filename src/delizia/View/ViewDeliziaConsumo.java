@@ -1,6 +1,6 @@
 package delizia.View;
 
-import delizia.Controler.DeliziaRegister;
+import delizia.Controler.DeliziaControler;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.sql.Date;
@@ -33,7 +33,7 @@ public class ViewDeliziaConsumo extends javax.swing.JFrame {
         
         listTablesAvailable.removeAllItems();
         ArrayList<String> listTables = new ArrayList<String>();
-        listTables = DeliziaRegister.llenarComboTables();
+        listTables = DeliziaControler.llenarComboTables();
         for (int i = 0; i < listTables.size(); i++) {
             listTablesAvailable.addItem(listTables.get(i));
         }
@@ -250,7 +250,7 @@ public class ViewDeliziaConsumo extends javax.swing.JFrame {
     private void btn_addConsumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addConsumoActionPerformed
         numTable = Integer.parseInt((String)listTablesAvailable.getSelectedItem());
         name = label_Name.getText();
-        DeliziaRegister.updateConsumo(numTable, name);
+        DeliziaControler.updateConsumo(numTable, name);
     }//GEN-LAST:event_btn_addConsumoActionPerformed
 
     private void inputConsumoCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputConsumoCActionPerformed
@@ -259,7 +259,7 @@ public class ViewDeliziaConsumo extends javax.swing.JFrame {
 
     private void listTablesAvailableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listTablesAvailableActionPerformed
         selectTable = Integer.parseInt((String) listTablesAvailable.getSelectedItem());
-        DeliziaRegister.consutTable(filter_date, selectTable);
+        DeliziaControler.consutTable(filter_date, selectTable);
     }//GEN-LAST:event_listTablesAvailableActionPerformed
 
     public static void main(String args[]) {
