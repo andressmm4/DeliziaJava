@@ -6,10 +6,14 @@ import java.awt.Dimension;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 public class ViewDeliziaConsumo extends javax.swing.JFrame {
 
     public static int consumo = 100;
+    public static int numTable;
+    public static int selectTable;
+    public static String name;
 
     //For Date
     java.util.Date date = new java.util.Date();
@@ -26,6 +30,14 @@ public class ViewDeliziaConsumo extends javax.swing.JFrame {
         label_Danger.setVisible(false);
         backgroundLabel_Succes.setVisible(false);
         backgroundLabel_Danger.setVisible(false);
+        
+        listTablesAvailable.removeAllItems();
+        ArrayList<String> listTables = new ArrayList<String>();
+        listTables = DeliziaRegister.llenarComboTables();
+        for (int i = 0; i < listTables.size(); i++) {
+            listTablesAvailable.addItem(listTables.get(i));
+        }
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -34,7 +46,6 @@ public class ViewDeliziaConsumo extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        inputTableC = new javax.swing.JTextField();
         btn_addConsumo = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -48,6 +59,7 @@ public class ViewDeliziaConsumo extends javax.swing.JFrame {
         label_Succes = new javax.swing.JLabel();
         backgroundLabel_Danger = new javax.swing.JPanel();
         label_Danger = new javax.swing.JLabel();
+        listTablesAvailable = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -65,7 +77,7 @@ public class ViewDeliziaConsumo extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addComponent(jLabel1)
-                .addContainerGap(172, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -74,13 +86,6 @@ public class ViewDeliziaConsumo extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(42, 42, 42))
         );
-
-        inputTableC.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        inputTableC.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inputTableCActionPerformed(evt);
-            }
-        });
 
         btn_addConsumo.setBackground(new java.awt.Color(6, 115, 227));
         btn_addConsumo.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -130,16 +135,16 @@ public class ViewDeliziaConsumo extends javax.swing.JFrame {
         backgroundLabel_SuccesLayout.setHorizontalGroup(
             backgroundLabel_SuccesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(backgroundLabel_SuccesLayout.createSequentialGroup()
-                .addGap(66, 66, 66)
+                .addGap(119, 119, 119)
                 .addComponent(label_Succes)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         backgroundLabel_SuccesLayout.setVerticalGroup(
             backgroundLabel_SuccesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(backgroundLabel_SuccesLayout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, backgroundLabel_SuccesLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(label_Succes)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         backgroundLabel_Danger.setBackground(new java.awt.Color(255, 193, 193));
@@ -154,7 +159,7 @@ public class ViewDeliziaConsumo extends javax.swing.JFrame {
         backgroundLabel_DangerLayout.setHorizontalGroup(
             backgroundLabel_DangerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(backgroundLabel_DangerLayout.createSequentialGroup()
-                .addGap(38, 38, 38)
+                .addGap(91, 91, 91)
                 .addComponent(label_Danger)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -166,6 +171,12 @@ public class ViewDeliziaConsumo extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        listTablesAvailable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listTablesAvailableActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -174,38 +185,43 @@ public class ViewDeliziaConsumo extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator1)
-                    .addComponent(label_Name, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btn_addConsumo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7)
+                            .addComponent(jSeparator1)
+                            .addComponent(label_Name, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btn_addConsumo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(jLabel9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(inputConsumoC, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel11))
-                            .addComponent(jLabel6))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(jLabel7)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(backgroundLabel_Succes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(backgroundLabel_Danger, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jLabel8)
+                                .addGap(18, 18, 18)
+                                .addComponent(listTablesAvailable, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(36, 36, 36)))
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(inputTableC, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(backgroundLabel_Succes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(backgroundLabel_Danger, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                        .addComponent(jLabel6)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(58, Short.MAX_VALUE)
+                .addComponent(jLabel9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(inputConsumoC, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel11)
+                .addGap(64, 64, 64))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
+                .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(inputTableC, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
+                    .addComponent(jLabel8)
+                    .addComponent(listTablesAvailable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -213,37 +229,38 @@ public class ViewDeliziaConsumo extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(label_Name, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(inputConsumoC, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9)
                     .addComponent(jLabel11))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                 .addComponent(btn_addConsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(backgroundLabel_Danger, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(backgroundLabel_Succes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_addConsumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addConsumoActionPerformed
-        int numTable = Integer.parseInt(inputTableC.getText());
-        DeliziaRegister.updateConsumo(numTable);
+        numTable = Integer.parseInt((String)listTablesAvailable.getSelectedItem());
+        name = label_Name.getText();
+        DeliziaRegister.updateConsumo(numTable, name);
     }//GEN-LAST:event_btn_addConsumoActionPerformed
-
-    private void inputTableCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputTableCActionPerformed
-        int numTable = Integer.parseInt(inputTableC.getText());
-        DeliziaRegister.consutTable(filter_date, numTable);
-    }//GEN-LAST:event_inputTableCActionPerformed
 
     private void inputConsumoCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputConsumoCActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_inputConsumoCActionPerformed
+
+    private void listTablesAvailableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listTablesAvailableActionPerformed
+        selectTable = Integer.parseInt((String) listTablesAvailable.getSelectedItem());
+        DeliziaRegister.consutTable(filter_date, selectTable);
+    }//GEN-LAST:event_listTablesAvailableActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -296,7 +313,6 @@ public class ViewDeliziaConsumo extends javax.swing.JFrame {
     public static javax.swing.JPanel backgroundLabel_Succes;
     public static javax.swing.JButton btn_addConsumo;
     public static javax.swing.JTextField inputConsumoC;
-    public static javax.swing.JTextField inputTableC;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel6;
@@ -308,5 +324,6 @@ public class ViewDeliziaConsumo extends javax.swing.JFrame {
     public static javax.swing.JLabel label_Danger;
     public static javax.swing.JLabel label_Name;
     public static javax.swing.JLabel label_Succes;
+    public static javax.swing.JComboBox<String> listTablesAvailable;
     // End of variables declaration//GEN-END:variables
 }

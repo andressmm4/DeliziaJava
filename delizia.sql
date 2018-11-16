@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-11-2018 a las 23:14:05
+-- Tiempo de generación: 16-11-2018 a las 04:14:10
 -- Versión del servidor: 10.1.34-MariaDB
 -- Versión de PHP: 7.2.7
 
@@ -41,14 +41,14 @@ CREATE TABLE `consumo` (
 INSERT INTO `consumo` (`id_cons`, `descript`, `total_cost`) VALUES
 (1, '0', 500),
 (2, '0', 1000),
-(3, '0', 700),
+(3, '0', 70),
 (4, '0', 200),
 (5, '0', 1000),
 (6, '0', 0),
 (7, '0', 0),
 (8, '0', 0),
-(9, '0', 0),
-(10, '0', 0);
+(9, '0', 300),
+(10, '0', 100);
 
 -- --------------------------------------------------------
 
@@ -120,7 +120,7 @@ CREATE TABLE `tables` (
 --
 
 INSERT INTO `tables` (`id_table`, `capacity`, `available`) VALUES
-(1, 2, '1'),
+(1, 2, '0'),
 (2, 2, '1'),
 (3, 2, '0'),
 (4, 2, '0'),
