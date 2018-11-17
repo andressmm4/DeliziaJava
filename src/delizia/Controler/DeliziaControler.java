@@ -166,7 +166,7 @@ public class DeliziaControler {
                     con = ConnectDB.connect();
                     ps = con.prepareStatement("INSERT INTO consumo (id_cons, descript, total_cost) VALUES (?, ?, ?)");
                     ps.setInt(1, count);
-                    ps.setString(2, "0");
+                    ps.setString(2, "0"); 
                     ps.setInt(3, 0);
 
                     res = ps.executeUpdate();
