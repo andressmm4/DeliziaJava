@@ -49,32 +49,10 @@ public class DeliziaControler {
                 lista.add(rs.getString("id_table"));
             }
         } catch (Exception e) {
+            System.out.println("AñadirListIncorrecto");
         }
         return lista;
     }
-
-    /*public static ArrayList<String> typesMenu() {
-        ArrayList<String> list = new ArrayList<String>();
-        String sql = "SELECT category FROM menu";
-        
-        try {
-            Connection con = null;
-            ps = con.prepareStatement(sql);
-            rs = ps.executeQuery();
-            System.out.println("ListMenuCorrecto");
-        } catch (Exception e) {
-            System.out.println("ListMenuIncorrecto");
-        }
-        
-        try {
-            while (rs.next()) {                
-                list.add(rs.getString("category"));
-            }
-        } catch (Exception e) {
-        }
-        
-        return list;
-    }*/
     
     //For Date
     java.util.Date date = new java.util.Date();
@@ -97,7 +75,7 @@ public class DeliziaControler {
             mimodel = new DefaultTableModel(null, titulos);
             Connection miConeccion = ConnectDB.connect();
             String sql;
-            sql = "SELECT reservations.id_rev, reservations.name, reservations.num_person, reservations.table_asigned, consumo.total_cost FROM reservations, consumo WHERE (reservations.id_rev = consumo.id_cons) AND (reservations.name LIKE '%" + filter_name + "%')";
+            sql = "SELECT reservations.id_rev, reservations.name, reservations.num_person, reservations.table_asigned, consumo.total_cost FROM reservations, consumo WHERE (reservations.id_rev = consumo.id_cons) AND (reservations.name LIKE '%" + filter_name + "%') AND (reservations.date = '" + filter_date + "')";
             PreparedStatement miStatement = miConeccion.prepareStatement(sql);
             ResultSet miResultset = miStatement.executeQuery(sql);
             while (miResultset.next()) {
@@ -138,7 +116,41 @@ public class DeliziaControler {
     }
 
     //Action save register/ consum and table asigned
-    public static void saveReservation(int count) {
+   
+
+    public static void consutTable(Date filter_date, int numTable) {
+        Connection con = null;
+        try {
+            con = ConnectDB.connect();
+            String sql = "";
+            sql = "SELECT * FROM reservations WHERE( date ='" + filter_date + "') AND (table_asigned LIKE '%" + numTable + "%')";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                ViewDeliziaConsumo.label_Succes.setVisible(false);
+                ViewDeliziaConsumo.label_Danger.setVisible(false);
+                ViewDeliziaConsumo.backgroundLabel_Succes.setVisible(false);
+                ViewDeliziaConsumo.backgroundLabel_Danger.setVisible(false);
+                ViewDeliziaConsumo.label_Name.setText(rs.getString("name"));
+                ViewDeliziaConsumo.inputConsumoC.setEnabled(true);
+                ViewDeliziaConsumo.btn_addConsumo.setEnabled(true);
+            } else {
+                ViewDeliziaConsumo.label_Succes.setVisible(false);
+                ViewDeliziaConsumo.label_Danger.setVisible(false);
+                ViewDeliziaConsumo.backgroundLabel_Succes.setVisible(false);
+                ViewDeliziaConsumo.backgroundLabel_Danger.setVisible(false);
+                ViewDeliziaConsumo.label_Name.setText("- - - - - - - - - - - - - - - - - ");
+                ViewDeliziaConsumo.inputConsumoC.setEnabled(false);
+                ViewDeliziaConsumo.btn_addConsumo.setEnabled(false);
+            }
+            con.close();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+     public static void saveReservation(int count) {
         //For Date
         java.util.Date date = new java.util.Date();
         DateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd");
@@ -192,6 +204,7 @@ public class DeliziaControler {
                         JOptionPane.showMessageDialog(null, "Reservación Realizada");
                         clear();
                         table(filter_date, "");
+                        llenarComboTables();
                     } else {
                         System.out.println("Datos de tb-consumo No Guardados");
                         JOptionPane.showMessageDialog(null, "Erro al Reservación Realizada");
@@ -213,40 +226,13 @@ public class DeliziaControler {
     }
 
     
-
-    public static void consutTable(Date filter_date, int numTable) {
-        Connection con = null;
-        try {
-            con = ConnectDB.connect();
-            String sql = "";
-            sql = "SELECT * FROM reservations WHERE( date ='" + filter_date + "') AND (table_asigned LIKE '%" + numTable + "%')";
-            ps = con.prepareStatement(sql);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                ViewDeliziaConsumo.label_Succes.setVisible(false);
-                ViewDeliziaConsumo.label_Danger.setVisible(false);
-                ViewDeliziaConsumo.backgroundLabel_Succes.setVisible(false);
-                ViewDeliziaConsumo.backgroundLabel_Danger.setVisible(false);
-                ViewDeliziaConsumo.label_Name.setText(rs.getString("name"));
-                ViewDeliziaConsumo.inputConsumoC.setEnabled(true);
-                ViewDeliziaConsumo.btn_addConsumo.setEnabled(true);
-            } else {
-                ViewDeliziaConsumo.label_Succes.setVisible(false);
-                ViewDeliziaConsumo.label_Danger.setVisible(false);
-                ViewDeliziaConsumo.backgroundLabel_Succes.setVisible(false);
-                ViewDeliziaConsumo.backgroundLabel_Danger.setVisible(false);
-                ViewDeliziaConsumo.label_Name.setText("- - - - - - - - - - - - - - - - - ");
-                ViewDeliziaConsumo.inputConsumoC.setEnabled(false);
-                ViewDeliziaConsumo.btn_addConsumo.setEnabled(false);
-            }
-            con.close();
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
     
     public static void updateConsumo(int numTable, String name) {
+        //For Date
+        java.util.Date date = new java.util.Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd");
+        Date filter_date = Date.valueOf(dateFormat.format(date));
+        
         Connection con = null;
         try {
             con = ConnectDB.connect();
@@ -292,7 +278,7 @@ public class DeliziaControler {
                 ViewDeliziaConsumo.label_Succes.setVisible(false);
                 ViewDeliziaConsumo.backgroundLabel_Succes.setVisible(false);
             }
-
+            table(filter_date, "");
             con.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());

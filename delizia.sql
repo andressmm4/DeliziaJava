@@ -19,10 +19,10 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `delizia`
+CREATE DATABASE `delizia`;
 --
 
--- --------------------------------------------------------
+-- -------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `consumo`
