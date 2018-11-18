@@ -184,7 +184,7 @@ reservations.table_asigned = $P!{Mesa}]]>
 				<text><![CDATA[Nombre:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="110" y="35" width="100" height="35" uuid="66a1c43e-49f9-4e37-b368-e6949c154b18"/>
+				<reportElement x="110" y="35" width="435" height="35" uuid="66a1c43e-49f9-4e37-b368-e6949c154b18"/>
 				<textElement>
 					<font size="16"/>
 				</textElement>
