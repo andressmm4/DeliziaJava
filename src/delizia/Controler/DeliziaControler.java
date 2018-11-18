@@ -40,7 +40,7 @@ public class DeliziaControler {
             rs = ps.executeQuery();
             
             System.out.println("ListCorecto");
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("ListIncorrecto");
         }
         
@@ -48,7 +48,7 @@ public class DeliziaControler {
             while (rs.next()) {
                 lista.add(rs.getString("id_table"));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("AñadirListIncorrecto");
         }
         return lista;
@@ -197,7 +197,7 @@ public class DeliziaControler {
                                 System.out.println("Fallo en la modificacion de la mesa");
                             }
                             
-                        } catch (Exception e) {
+                        } catch (SQLException e) {
                             System.out.println(e);
                         }
            
