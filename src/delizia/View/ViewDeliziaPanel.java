@@ -1,12 +1,26 @@
 package delizia.View;
 
 import delizia.Controler.DeliziaControler;
+import delizia.Model.ConnectDB;
+import static delizia.View.ViewDeliziaConsumo.listTablesAvailable;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.sql.Connection;
 import java.sql.Date;
 import javax.swing.JFrame;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 public class ViewDeliziaPanel extends javax.swing.JFrame {
 
@@ -14,6 +28,7 @@ public class ViewDeliziaPanel extends javax.swing.JFrame {
     ViewDeliziaLogin loginWindow = new ViewDeliziaLogin();
     ViewDeliziaConsumo consumoWindow = new ViewDeliziaConsumo();
     
+    Connection con = null;  
     //For Date
         java.util.Date date = new java.util.Date();
         DateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd");
@@ -26,8 +41,23 @@ public class ViewDeliziaPanel extends javax.swing.JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setMinimumSize(new Dimension(1920, 1080));
         DeliziaControler.table(filter_date, "");
+        
+        selectTableFact.removeAllItems();
+        ArrayList<String> listTables = new ArrayList<String>();
+        listTables = DeliziaControler.llenarComboTables();
+        for (int i = 0; i < listTables.size(); i++) {
+            selectTableFact.addItem(listTables.get(i));
+        }
     }
-
+    public static void addItemsFacts(){ 
+        selectTableFact.removeAllItems();
+        ArrayList<String> listTables = new ArrayList<String>();
+        listTables = DeliziaControler.llenarComboTables();
+        for (int i = 0; i < listTables.size(); i++) {
+            selectTableFact.addItem(listTables.get(i));
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -43,6 +73,8 @@ public class ViewDeliziaPanel extends javax.swing.JFrame {
         panelFacturacion = new javax.swing.JPanel();
         btn_proces = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        selectTableFact = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         table_view_register = new javax.swing.JTable();
         input_filter = new javax.swing.JTextField();
@@ -102,7 +134,7 @@ public class ViewDeliziaPanel extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelResevationLayout.createSequentialGroup()
                 .addGap(27, 27, 27)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                 .addComponent(btn_register, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -159,22 +191,45 @@ public class ViewDeliziaPanel extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Facturación");
 
+        jLabel7.setText("MESA: ");
+
+        selectTableFact.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout panelFacturacionLayout = new javax.swing.GroupLayout(panelFacturacion);
         panelFacturacion.setLayout(panelFacturacionLayout);
         panelFacturacionLayout.setHorizontalGroup(
             panelFacturacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btn_proces, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
             .addGroup(panelFacturacionLayout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addComponent(jLabel4)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(panelFacturacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelFacturacionLayout.createSequentialGroup()
+                        .addGap(71, 71, 71)
+                        .addGroup(panelFacturacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btn_proces, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
+                            .addGroup(panelFacturacionLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(26, 26, 26)
+                                .addComponent(selectTableFact, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(26, 26, 26))))
+                    .addGroup(panelFacturacionLayout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addContainerGap())))
         );
         panelFacturacionLayout.setVerticalGroup(
             panelFacturacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFacturacionLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(panelFacturacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelFacturacionLayout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFacturacionLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(panelFacturacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(selectTableFact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)))
                 .addComponent(btn_proces, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -227,7 +282,7 @@ public class ViewDeliziaPanel extends javax.swing.JFrame {
                         .addComponent(panelConsumo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(165, 165, 165)
                         .addComponent(panelFacturacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(175, Short.MAX_VALUE))
+                .addContainerGap(56, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -237,14 +292,14 @@ public class ViewDeliziaPanel extends javax.swing.JFrame {
                     .addComponent(panelConsumo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(panelResevation, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(panelFacturacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(179, 179, 179)
+                .addGap(178, 178, 178)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(input_filter, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(308, Short.MAX_VALUE))
+                .addContainerGap(292, Short.MAX_VALUE))
         );
 
         jPanel4.setBackground(new java.awt.Color(52, 58, 64));
@@ -326,7 +381,28 @@ public class ViewDeliziaPanel extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_addActionPerformed
 
     private void btn_procesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_procesActionPerformed
-
+        int tableFact = Integer.parseInt((String)selectTableFact.getSelectedItem());
+        try {
+            con = ConnectDB.connect();
+            JasperReport report = null;
+            String path = "src\\delizia\\report\\DeliziaReport.jasper";
+            
+            Map parametro = new HashMap();
+            parametro.put("Mesa", tableFact);
+            
+            report = (JasperReport) JRLoader.loadObjectFromFile(path);
+            
+            JasperPrint jprint = JasperFillManager.fillReport(report, parametro, con);
+            
+            JasperViewer view = new JasperViewer(jprint, false);
+            
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            
+            view.setVisible(true);
+            
+        } catch (JRException ex) {
+            Logger.getLogger(ViewDeliziaPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btn_procesActionPerformed
 
     private void input_filterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_input_filterActionPerformed
@@ -378,6 +454,7 @@ public class ViewDeliziaPanel extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
@@ -385,6 +462,7 @@ public class ViewDeliziaPanel extends javax.swing.JFrame {
     private javax.swing.JPanel panelConsumo;
     private javax.swing.JPanel panelFacturacion;
     private javax.swing.JPanel panelResevation;
+    public static javax.swing.JComboBox<String> selectTableFact;
     public static javax.swing.JTable table_view_register;
     // End of variables declaration//GEN-END:variables
 }

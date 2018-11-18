@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8eaa4e0f-d212-42f1-b9bc-d2cd21cb4155">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="data" uuid="df60d3b5-be9f-42b1-a760-0613efdcbb0b">
+		<queryString language="SQL">
+			<![CDATA[SELECT
+     reservations.`id_rev` AS reservations_id_rev,
+     reservations.`date` AS reservations_date,
+     reservations.`name` AS reservations_name,
+     reservations.`num_person` AS reservations_num_person,
+     reservations.`consumo_asigned` AS reservations_consumo_asigned,
+     reservations.`table_asigned` AS reservations_table_asigned,
+     consumo.`id_cons` AS consumo_id_cons,
+     consumo.`total_cost` AS consumo_total_cost,
+     tables.`id_table` AS tables_id_table,
+     tables.`capacity` AS tables_capacity,
+     tables.`available` AS tables_available
+FROM
+     `reservations` reservations INNER JOIN `consumo` consumo ON reservations.`id_rev` = consumo.`id_cons`
+     INNER JOIN `tables` tables ON reservations.`table_asigned` = tables.`id_table`]]>
+		</queryString>
+		<field name="reservations_id_rev" class="java.lang.Integer"/>
+		<field name="reservations_date" class="java.sql.Date"/>
+		<field name="reservations_name" class="java.lang.String"/>
+		<field name="reservations_num_person" class="java.lang.Integer"/>
+		<field name="reservations_consumo_asigned" class="java.lang.Integer"/>
+		<field name="reservations_table_asigned" class="java.lang.Integer"/>
+		<field name="consumo_id_cons" class="java.lang.Integer"/>
+		<field name="consumo_total_cost" class="java.lang.Integer"/>
+		<field name="tables_id_table" class="java.lang.Integer"/>
+		<field name="tables_capacity" class="java.lang.Integer"/>
+		<field name="tables_available" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="Mesa" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     reservations.`id_rev` AS id_rev,
+     reservations.`date` AS reservations_date,
+     reservations.`name` AS name,
+     reservations.`num_person` AS reservations_num_person,
+     reservations.`consumo_asigned` AS reservations_consumo_asigned,
+     reservations.`table_asigned` AS table_asigned,
+     consumo.`id_cons` AS consumo_id_cons,
+     consumo.`total_cost` AS total_cost,
+     tables.`id_table` AS tables_id_table,
+     tables.`available` AS tables_available
+FROM
+     `reservations` reservations INNER JOIN `consumo` consumo ON reservations.`id_rev` = consumo.`id_cons`
+     INNER JOIN `tables` tables ON reservations.`table_asigned` = tables.`id_table`
+
+WHERE
+reservations.date = '2018-11-17'
+AND 
+reservations.table_asigned = $P!{Mesa}]]>
+	</queryString>
+	<field name="id_rev" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="reservations_date" class="java.sql.Date"/>
+	<field name="name" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="reservations_num_person" class="java.lang.Integer"/>
+	<field name="reservations_consumo_asigned" class="java.lang.Integer"/>
+	<field name="table_asigned" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="consumo_id_cons" class="java.lang.Integer"/>
+	<field name="total_cost" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tables_id_table" class="java.lang.Integer"/>
+	<field name="tables_available" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="74" splitType="Stretch">
+			<staticText>
+				<reportElement x="222" y="19" width="110" height="41" uuid="29cd5be2-32ca-48af-8f98-7b6e866baacd">
+					<property name="net.sf.jasperreports.export.pdf.tag.h3" value="full"/>
+				</reportElement>
+				<textElement>
+					<font size="28"/>
+				</textElement>
+				<text><![CDATA[DELIZIA]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="320" y="0" width="135" height="35" uuid="015b7ce9-21bd-410b-b96d-e3820a4b0c0b"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="K:mm a, z">
+				<reportElement x="455" y="0" width="100" height="35" uuid="3c0c63cc-4631-44b5-97ac-1cc8a61772d8"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="38" splitType="Stretch">
+			<break>
+				<reportElement x="0" y="0" width="555" height="1" uuid="f6402f26-4747-4f5c-8150-19646f2ccf4c"/>
+			</break>
+			<textField>
+				<reportElement x="97" y="1" width="235" height="37" uuid="7a000449-f13a-4f88-bc14-e67efabee3a8"/>
+				<textElement markup="none">
+					<font size="20" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{id_rev}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="1" width="89" height="36" uuid="f6f7db17-1e69-4ca1-9b81-16270c0ca8d5"/>
+				<textElement>
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ORDEN # ]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField>
+				<reportElement x="110" y="78" width="144" height="32" uuid="d66054b4-c32a-4c79-a803-32dbd40c92ab"/>
+				<textElement>
+					<font size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{table_asigned}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="-305" y="-26" width="89" height="35" uuid="fef3260c-021e-4a66-b4bb-0698035b10d6"/>
+				<textElement>
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[Nombre:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="78" width="100" height="32" uuid="1d000c11-2a9d-49ad-afcf-58eeb22dcdd7"/>
+				<textElement>
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[Mesa:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="35" width="100" height="35" uuid="cd16a497-173c-45a6-899b-9620ad3599c7"/>
+				<textElement>
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[Nombre:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="110" y="35" width="100" height="35" uuid="66a1c43e-49f9-4e37-b368-e6949c154b18"/>
+				<textElement>
+					<font size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="332" y="94" width="61" height="31" uuid="10a33a07-a092-43e7-87f9-6b9595e7adf6"/>
+				<textElement>
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[TOTAL:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="405" y="91" width="150" height="34" uuid="fed36a49-9bb6-4f8f-951c-8711013537b1"/>
+				<textElement>
+					<font size="18" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_cost}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
