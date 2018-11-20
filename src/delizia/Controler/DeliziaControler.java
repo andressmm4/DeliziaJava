@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class DeliziaControler {
-    
+
     //Variables
     public static int countRegister;
     public static int consumoAsigned;
@@ -38,12 +38,12 @@ public class DeliziaControler {
             con = ConnectDB.connect();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
-            
+
             System.out.println("ListCorecto");
         } catch (SQLException e) {
             System.out.println("ListIncorrecto");
         }
-        
+
         try {
             while (rs.next()) {
                 lista.add(rs.getString("id_table"));
@@ -53,7 +53,7 @@ public class DeliziaControler {
         }
         return lista;
     }
-    
+
     //For Date
     java.util.Date date = new java.util.Date();
     DateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd");
@@ -65,9 +65,9 @@ public class DeliziaControler {
         ViewDeliziaReservation.inputName.setText(null);
         ViewDeliziaReservation.inputNumPersons.setText(null);
     }
-    
-    
-    
+
+
+
     public static void table(Date filter_date, String filter_name) {
         try {
             String[] titulos = {"ID", "NOMBRE", "N.PERSONAS", "MESA", "CONSUMO"};
@@ -91,23 +91,23 @@ public class DeliziaControler {
             System.out.println(e.getMessage());
         }
     }
-    
+
     //Contamos las reservaciones que estan registradas
     public static void countRegisterMetod(){
         Connection con = null;
-        
+
         try {
             con = ConnectDB.connect();
             String sql = "";
             sql = "SELECT count(*) as total FROM reservations";
-            
+
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
-            
+
             if (rs.next()) {
                 int result = Integer.parseInt(rs.getString("total"));
                 countRegister = result + 1;
-            } 
+            }
             con.close();
 
         } catch (SQLException e) {
@@ -116,7 +116,7 @@ public class DeliziaControler {
     }
 
     //Action save register/ consum and table asigned
-   
+
 
     public static void consutTable(Date filter_date, int numTable) {
         Connection con = null;
@@ -149,16 +149,16 @@ public class DeliziaControler {
             System.out.println(e.getMessage());
         }
     }
-    
+
      public static void saveReservation(int count) {
         //For Date
         java.util.Date date = new java.util.Date();
         DateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd");
         Date filter_date = Date.valueOf(dateFormat.format(date));
-        
+
         //Variable of Connection
         Connection con = null;
-        
+
         try {
             //Ingramos la datos de la reservacion
             con = ConnectDB.connect();
@@ -168,7 +168,7 @@ public class DeliziaControler {
             ps.setInt(3, Integer.parseInt(ViewDeliziaReservation.inputNumPersons.getText()));
             ps.setInt(4, count);
             ps.setString(5, ViewDeliziaReservation.inputTable.getText());
-            int tableAsigned = Integer.parseInt(ViewDeliziaReservation.inputTable.getText()); 
+            int tableAsigned = Integer.parseInt(ViewDeliziaReservation.inputTable.getText());
             int res = ps.executeUpdate();
             if (res > 0) {
                 System.out.println("Datos de tb-reservations Guardados");
@@ -184,55 +184,57 @@ public class DeliziaControler {
                     res = ps.executeUpdate();
                     if (res > 0) {
                         System.out.println("Datos de tb-consumo Guardados");
-                        
+
                         try {
                             //A la mesa asignada le cambios el valor a ocupada
                             con = ConnectDB.connect();
                             ps = con.prepareStatement("UPDATE tables SET available = '1' WHERE tables.id_table = '" + tableAsigned + "'");
                             res = ps.executeUpdate();
-                            
+
                             if (res > 0) {
                                 System.out.println("Mesa modificada");
                             } else {
                                 System.out.println("Fallo en la modificacion de la mesa");
                             }
-                            
+
                         } catch (SQLException e) {
                             System.out.println(e);
                         }
-           
+
                         JOptionPane.showMessageDialog(null, "Reservación Realizada");
                         clear();
                         table(filter_date, "");
+
                         llenarComboTables();
+
                     } else {
                         System.out.println("Datos de tb-consumo No Guardados");
                         JOptionPane.showMessageDialog(null, "Erro al Reservación Realizada");
                     }
                     con.close();
-                    
+
                 } catch (Exception e) {
                     System.out.println(e);
                 }
-                
+
             } else {
-                System.out.println("Datos de tb-reservations No Guardados"); 
+                System.out.println("Datos de tb-reservations No Guardados");
             }
             con.close();
-            
+
         } catch (Exception e) {
             System.out.println(e);
         }
     }
 
-    
-    
+
+
     public static void updateConsumo(int numTable, String name) {
         //For Date
         java.util.Date date = new java.util.Date();
         DateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd");
         Date filter_date = Date.valueOf(dateFormat.format(date));
-        
+
         Connection con = null;
         try {
             con = ConnectDB.connect();
@@ -240,24 +242,24 @@ public class DeliziaControler {
             sqlSelect = "SELECT reservations.consumo_asigned, consumo.total_cost FROM reservations, consumo WHERE reservations.name = '" + name + "' AND reservations.id_rev = consumo.id_cons";
             ps = con.prepareStatement(sqlSelect);
             rs = ps.executeQuery();
-            
+
             if (rs.next()) {
                 idConsumoAsigned = Integer.parseInt(rs.getString("consumo_asigned"));
                 consumoAsigned = Integer.parseInt(rs.getString("total_cost"));
-                
+
                 System.out.println("ConsultReservationsForConsumo_Correct");
             }
-            
+
         } catch (SQLException e) {
             System.out.println("ConsultReservationsForConsumo_Incorrect");
         }
-        
+
         try {
             int firstConsumo = consumoAsigned;
             int secondConsumo = Integer.parseInt(ViewDeliziaConsumo.inputConsumoC.getText());
             int newConsumo = firstConsumo + secondConsumo;
             System.out.println(newConsumo);
-            
+
             String sqlUpdate;
             sqlUpdate = "UPDATE consumo SET total_cost ='" + newConsumo + "' WHERE consumo.id_cons = '" + idConsumoAsigned + "'";
             ps = con.prepareStatement(sqlUpdate);
@@ -282,6 +284,33 @@ public class DeliziaControler {
             con.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        }
+    }
+    public static void facturar(int table){
+        //For Date
+        java.util.Date date = new java.util.Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd");
+        Date filter_date = Date.valueOf(dateFormat.format(date));
+
+        //Variable of Connection
+        Connection con = null;
+
+        try {
+            //A la mesa asignada le cambios el valor a ocupada
+            con = ConnectDB.connect();
+            ps = con.prepareStatement("UPDATE tables SET available = '0' WHERE tables.id_table = '" + table + "'");
+            int res = ps.executeUpdate();
+
+            if (res > 0) {
+                System.out.println("Mesa modificada");
+                llenarComboTables();
+                ViewDeliziaPanel.addItemsFacts();
+            } else {
+                System.out.println("Fallo en la modificacion de la mesa");
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e);
         }
     }
 }

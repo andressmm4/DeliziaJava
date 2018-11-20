@@ -381,6 +381,7 @@ public class ViewDeliziaPanel extends javax.swing.JFrame {
 
     private void btn_procesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_procesActionPerformed
         int tableFact = Integer.parseInt((String)selectTableFact.getSelectedItem());
+        System.out.println(tableFact);
         try {
             con = ConnectDB.connect();
             JasperReport report = null;
@@ -398,6 +399,8 @@ public class ViewDeliziaPanel extends javax.swing.JFrame {
             view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             
             view.setVisible(true);
+            
+            DeliziaControler.facturar(tableFact);
             
         } catch (JRException ex) {
             Logger.getLogger(ViewDeliziaPanel.class.getName()).log(Level.SEVERE, null, ex);

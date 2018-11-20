@@ -135,6 +135,7 @@ public class ViewDeliziaReservation extends javax.swing.JFrame {
         DeliziaControler.countRegisterMetod();
         count = DeliziaControler.countRegister;
         DeliziaControler.saveReservation(count);
+        ViewDeliziaPanel.addItemsFacts();
     }//GEN-LAST:event_btn_newRegisterActionPerformed
 
     public static void main(String args[]) {

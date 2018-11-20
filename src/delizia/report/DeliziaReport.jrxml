@@ -76,7 +76,7 @@ FROM
      INNER JOIN `tables` tables ON reservations.`table_asigned` = tables.`id_table`
 
 WHERE
-reservations.date = '2018-11-17'
+reservations.date = '2018-11-19'
 AND 
 reservations.table_asigned = $P!{Mesa}]]>
 	</queryString>
